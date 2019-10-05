@@ -1,0 +1,15 @@
+Добрый день!
+
+Информация за указанный промежуток времени о выданных купюрах и ошибках описана ниже:
+
+
+LCDM: e5 r0 c5 n1000.00 0 - e* - кол-во купюр прошедших через EXIT SENSOR, r* - кол-во купюр скинутых в реджект, c* - кол-во купюр прошедших через CHK SENSOR, n - номинал купюр
+BOX 0 - u5 r0 c325 n1000 - u* - кол-во купюр вытащенных с кассеты, r* - кол-во купюр скинутых в реджект, с* - кол-во купюр оставшихся в диспенсере(в кассете + в реджект трее)
+LCDM: command '45', answer: Jam at EXIT sensor or EJT sensor status: '35' - ошибка диспенсера, при выдаче с верхней кассеты(command '45'), пришел ответ о замятии купюры в районе EXIT-сенсора или EJT-сенсора( Jam at EXIT sensor or EJT sensor status: '35')
+LCDM: command '44', answer: Normal stop status: '31' - диспенсер успешно(Normal stop status: '31') очистил транспорт(command '44')
+LCDM: command '44', answer: Jam at DIV sensor status: '36' - диспенсер не успешно очистил транспорт(command '44'), замятие купюры в районе DIV-сенсора (Jam at DIV sensor status: '36' )
+LCDM: command '45', answer: Jam at CHK 1,2 sensor status: '33' - ошибка диспенсера, при выдаче с верхней кассеты(command '45'), пришел ответ о замятии купюры в районе CHK-сенсора( Jam at CHK 1,2 sensor status: '33')
+LCDM: command '45', answer: Timeout (from DIV TO EJT sensors) status: '43' - ошибка диспенсера, при выдаче с верхней кассеты(command '45'), пришел ответ таймаут прохождения купюры между сенсорами DIV и EJT( Timeout (from DIV TO EJT sensors) status: '43' )
+LCDM: command '45', answer: Pickup error status: '32' - ошибка диспенсера, при выдаче с верхней кассеты(command '45'), пришел ответ о ошибке захвата купюры из кассеты (Pickup error status: '32')
+LCDM: command '45', answer: Upper bill end status: '38' - ошибка диспенсера, при выдаче с верхней кассеты(command '45'), пришел ответ, что в кассете отсутствуют купюры (Upper bill end status: '38')
+LCDM box 0 blocked - диспенсер заблокировал верхнюю кассету для выдачи(блокировка снимается при перезагрузке терминала)')
