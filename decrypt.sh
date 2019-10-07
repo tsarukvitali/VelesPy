@@ -28,7 +28,7 @@ case $decrypt in
             sed '1,'$firstline'd' $delstrings >> $inkass_file
         else
             echo "$inkasslegend" >> $inkass_file
-            echo "$sortstrings" >> $inkass_file
+            echo $(<"$sortstrings") >> $inkass_file
         fi
         for file in ./log/*
         do
