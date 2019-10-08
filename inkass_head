@@ -12,4 +12,5 @@ LCDM: command '45', answer: Jam at CHK 1,2 sensor status: '33' - ошибка д
 LCDM: command '45', answer: Timeout (from DIV TO EJT sensors) status: '43' - ошибка диспенсера, при выдаче с верхней кассеты(command '45'), пришел ответ таймаут прохождения купюры между сенсорами DIV и EJT( Timeout (from DIV TO EJT sensors) status: '43' )
 LCDM: command '45', answer: Pickup error status: '32' - ошибка диспенсера, при выдаче с верхней кассеты(command '45'), пришел ответ о ошибке захвата купюры из кассеты (Pickup error status: '32')
 LCDM: command '45', answer: Upper bill end status: '38' - ошибка диспенсера, при выдаче с верхней кассеты(command '45'), пришел ответ, что в кассете отсутствуют купюры (Upper bill end status: '38')
-LCDM box 0 blocked - диспенсер заблокировал верхнюю кассету для выдачи(блокировка снимается при перезагрузке терминала)')
+LCDM box 0 blocked - диспенсер заблокировал верхнюю кассету для выдачи(блокировка снимается при перезагрузке терминала)
+

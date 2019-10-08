@@ -29,7 +29,7 @@ inkass_action() {
     fi
     for file in ./log/*
     do
-        grep -A 17 'BOX 0 l' $file >> $inkass_file
+        grep -A 17 'BOX [0-1] l' $file >> $inkass_file
         grep -B 20 'unload from   cashbox' $file >> $inkass_file
     done
 }
