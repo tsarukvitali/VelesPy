@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#Copyright 2019 Tsaruk Vitaly
+#Licensed under the Apache License, Version 2.0
 
 inkass_action() {
     inkasslegend=$(<inkass_head)
@@ -8,6 +10,7 @@ inkass_action() {
     if [ -f $inkass_file ] ; then
         rm $inkass_file
     fi
+    
     findvariable=$(mktemp)
     sortstrings=$(mktemp)
     snumberf=$(mktemp)
@@ -34,12 +37,36 @@ inkass_action() {
     done
 }
 
-
-#echo -n "What you need to decrypt now? (1/2/3): "
-#read decrypt
+keno_action() {
+    kenolegend=$(<keno_head)
+    
+    keno_file="./keno.txt"
+    if [ -f $keno_file ] ; then
+        rm $keno_file
+    fi
+    
+    findvariable=$(mktemp)
+    delstrings=$(mktemp)
+    egrep -r ' BD: | BL | BMA: |BEGIN' log/ | sed -r 's!(^[^\(]+\()!(!g' >> $findvariable
+    echo -n "Enter start date(YYYY-MM-DD HH:MM): "
+    read sdata
+    echo -n "Enter end date(YYYY-MM-DD HH:MM): "
+    read edata
+    sdata="(${sdata}"
+    edata="(${edata}"
+    f1data=$(echo \(1970-01-01 00:00)
+    f2data=$(echo \(1970-01-01 00:10)
+    echo "$kenolegend" >> $keno_file
+    while read LINE; do
+        if [[ ("$sdata" < "$LINE" && "$LINE" < "$edata") || ( "$f1data" < "$LINE" && "$LINE" < "$f2data") ]]; then
+            echo "$LINE" >> $delstrings
+        fi
+    done < $findvariable
+    grep -v "AddTicketButton" $delstrings >> $keno_file
+}
 
 case $1 in
-    1) inkass_action
+    1 | --inkass) inkass_action
     ;;
     2) egrep -r 'Escrow command|Stacked command|BillAcceptor|Transport|jammed status|CCTALK: error read answer' log/ | sed -r 's!(^[^\(]+\()!(!g' >>3.txt
         #grep -B   unload from   cashbox
@@ -48,24 +75,7 @@ case $1 in
     ;;
     4) egrep -r 'Escrow command|Stacked command|BillAcceptor|total spin|spintotal| BL | TW: | Balance |LUA:|enter double|opened|LCDM: e| SSP: dd |paycenter|exit double' log/ | sed -r 's!(^[^\(]+\()!(!g' >>3.txt
     ;;
-    5) findvariable=$(mktemp)
-        delstrings=$(mktemp)
-        egrep -r ' BD: | BL | BMA: |BEGIN' log/ | sed -r 's!(^[^\(]+\()!(!g' >>$findvariable
-        echo -n "Enter start date: "
-        read sdata
-        echo -n "Enter end date: "
-        read edata
-        sdata="(${sdata}"
-        edata="(${edata}"
-        f1data=$(echo \(1970-01-01 00:00)
-        f2data=$(echo \(1970-01-01 00:10)
-        while read LINE; do 
-            if [[ ("$sdata" < "$LINE" && "$LINE" < "$edata") || ( "$f1data" < "$LINE" && "$LINE" < "$f2data") ]]; then
-               echo "$LINE" >> $delstrings
-            fi
-        done < $findvariable
-        grep -v "AddTicketButton" $delstrings >>keno.txt
-        #(2019-09-26 11:16:01) | 21892.147056 | INFO   | GRAPH:85 | t:139950792034368 | BD: AddTicketButton : 305,524 - эти нужно удалять
+    5 | --keno) keno_action
     ;;
     7) egrep -r 'LCDM' log/ | sed -r 's!(^[^\(]+\()!(!g' >>LCDM.txt
     ;;
