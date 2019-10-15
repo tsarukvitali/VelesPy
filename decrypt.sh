@@ -12,7 +12,7 @@ inkass_action() {
     sortstrings=$(mktemp)
     snumberf=$(mktemp)
     delstrings=$(mktemp)
-    egrep -r 'BOX [0-1] l|LCDM: e|BOX [0-1] - u|bill end status|LCDM box [0-1] blocked|answer: Timeout|sensor status|LCDM: read timeout|Counting error|Motor stop status|SOL sensor|Pickup error|Over reject status' log/ | sed -r 's!(^[^\(]+\()!(!g' >> $findvariable
+    egrep -r 'BOX [0-1] l|LCDM: e|BOX [0-1] - u|bill end status|LCDM box [0-1] blocked|answer: Timeout|sensor status|LCDM: read timeout|Counting error|Motor stop status|SOL sensor|Pickup error|Over reject status|Reject tray is not recognized' log/ | sed -r 's!(^[^\(]+\()!(!g' >> $findvariable
     sort --output=$sortstrings $findvariable
     snumber=$(grep -n "BOX [0-1] l" $sortstrings | cut -f1 -d:)
     echo "$snumber" >> $snumberf
@@ -35,10 +35,10 @@ inkass_action() {
 }
 
 
-echo -n "What you need to decrypt now? (1/2/3): "
-read decrypt
+#echo -n "What you need to decrypt now? (1/2/3): "
+#read decrypt
 
-case $decrypt in
+case $1 in
     1) inkass_action
     ;;
     2) egrep -r 'Escrow command|Stacked command|BillAcceptor|Transport|jammed status|CCTALK: error read answer' log/ | sed -r 's!(^[^\(]+\()!(!g' >>3.txt
@@ -48,7 +48,23 @@ case $decrypt in
     ;;
     4) egrep -r 'Escrow command|Stacked command|BillAcceptor|total spin|spintotal| BL | TW: | Balance |LUA:|enter double|opened|LCDM: e| SSP: dd |paycenter|exit double' log/ | sed -r 's!(^[^\(]+\()!(!g' >>3.txt
     ;;
-    5) egrep -r ' BD: | BL | BMA: |BEGIN' log/ | sed -r 's!(^[^\(]+\()!(!g' >>3.txt
+    5) findvariable=$(mktemp)
+        delstrings=$(mktemp)
+        egrep -r ' BD: | BL | BMA: |BEGIN' log/ | sed -r 's!(^[^\(]+\()!(!g' >>$findvariable
+        echo -n "Enter start date: "
+        read sdata
+        echo -n "Enter end date: "
+        read edata
+        sdata="(${sdata}"
+        edata="(${edata}"
+        f1data=$(echo \(1970-01-01 00:00)
+        f2data=$(echo \(1970-01-01 00:10)
+        while read LINE; do 
+            if [[ ("$sdata" < "$LINE" && "$LINE" < "$edata") || ( "$f1data" < "$LINE" && "$LINE" < "$f2data") ]]; then
+               echo "$LINE" >> $delstrings
+            fi
+        done < $findvariable
+        grep -v "AddTicketButton" $delstrings >>keno.txt
         #(2019-09-26 11:16:01) | 21892.147056 | INFO   | GRAPH:85 | t:139950792034368 | BD: AddTicketButton : 305,524 - эти нужно удалять
     ;;
     7) egrep -r 'LCDM' log/ | sed -r 's!(^[^\(]+\()!(!g' >>LCDM.txt
@@ -59,6 +75,8 @@ case $decrypt in
         exit 1
     ;;
 esac
+
+
 
 
 
