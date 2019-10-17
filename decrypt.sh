@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Copyright 2019 Tsaruk Vitaly
-#Licensed under the Apache License, Version 2.0
+#Licensed under the Apache License, Version 2.0 
 
 inkass_action() {
     inkasslegend=$(<inkass_head)
