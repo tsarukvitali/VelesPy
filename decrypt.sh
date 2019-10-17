@@ -28,7 +28,7 @@ inkass_action() {
         sed '1,'$firstline'd' $delstrings >> $inkass_file
     else
         echo "$inkasslegend" >> $inkass_file
-        echo $(<"$sortstrings") >> $inkass_file
+        cat "$sortstrings" >> $inkass_file
     fi
     for file in ./log/*
     do
@@ -77,12 +77,45 @@ bur_action() {
     egrep -r 'Escrow command|Stacked complete|BillAcceptor|CCNet: error read answer|initialize billacceptor on port| BD: 1| BD: 2| BD: 5' log/ | sed -r 's!(^[^\(]+\()!(!g' >>$findvariable
     sort --output=$sortstrings $findvariable
     echo "$burlegend" >> $bur_file
-    echo $(<"$sortstrings") >> $bur_file
+    echo >> $bur_file
+    cat "$sortstrings" >> $bur_file
     for file in ./log/*
     do
         grep -A 41 'BD: EncAcceptorBtn ' $file >> $bur_file
     done
 }
+
+balance_action() {
+    balancelegend=$(<balance_head)
+    balance_file="./balance.txt"
+
+    if [ -f $balance_file ] ; then
+        rm $balance_file
+    fi
+
+    findvariable=$(mktemp)
+    delstrings=$(mktemp)    
+    egrep -r 'BillAcceptor|total spin|SpinTotal|BEGIN| BL | TW: | Balance |LUA:|enter double|opened|LCDM: e|BOX [0-1] - u|SSP: dd |paycenter|exit double' log/ | sed -r 's!(^[^\(]+\()!(!g' >>$findvariable
+    echo -n "Enter start date(YYYY-MM-DD HH:MM): "
+    read sdata
+    echo -n "Enter end date(YYYY-MM-DD HH:MM): "
+    read edata
+    sdata="(${sdata}"
+    edata="(${edata}"
+    f1data=$(echo \(1970-01-01 00:00)
+    f2data=$(echo \(1970-01-01 00:10)
+    echo "$balancelegend" >> $balance_file
+    echo >> $balance_file
+    while read LINE; do
+        if [[ ("$sdata" < "$LINE" && "$LINE" < "$edata") || ( "$f1data" < "$LINE" && "$LINE" < "$f2data") ]]; then
+            echo "$LINE" >> $delstrings
+        fi
+    done < $findvariable
+    cat "$delstrings" >>$balance_file
+}
+
+
+
 
 case $1 in
     1 | --inkass) inkass_action
@@ -94,7 +127,8 @@ case $1 in
     3 | --bur) bur_action
         code bur.txt      
     ;;
-    4) egrep -r 'Escrow command|Stacked command|BillAcceptor|total spin|spintotal| BL | TW: | Balance |LUA:|enter double|opened|LCDM: e| SSP: dd |paycenter|exit double' log/ | sed -r 's!(^[^\(]+\()!(!g' >>3.txt
+    4 | --balance) balance_action
+                     code balance.txt  
     ;;
     5 | --keno) keno_action
                 code keno.txt
