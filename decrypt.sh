@@ -71,7 +71,8 @@ bur_action() {
     bur_file="./bur.txt"
     if [ -f $bur_file ] ; then
         rm $bur_file
-    fi       
+    fi
+    
     findvariable=$(mktemp)
     sortstrings=$(mktemp)
     egrep -r 'Escrow command|Stacked complete|BillAcceptor|CCNet: error read answer|initialize billacceptor on port| BD: 1| BD: 2| BD: 5' log/ | sed -r 's!(^[^\(]+\()!(!g' >>$findvariable
@@ -86,18 +87,18 @@ bur_action() {
 
 case $1 in
     1 | --inkass) inkass_action
-                    code inkass.txt
+        code inkass.txt
     ;;
     2) egrep -r 'Escrow command|Stacked command|BillAcceptor|Transport|jammed status|CCTALK: error read answer' log/ | sed -r 's!(^[^\(]+\()!(!g' >>3.txt
         #grep -B   unload from   cashbox
     ;;
     3 | --bur) bur_action
-        code bur.txt      
+        code bur.txt
     ;;
     4) egrep -r 'Escrow command|Stacked command|BillAcceptor|total spin|spintotal| BL | TW: | Balance |LUA:|enter double|opened|LCDM: e| SSP: dd |paycenter|exit double' log/ | sed -r 's!(^[^\(]+\()!(!g' >>3.txt
     ;;
     5 | --keno) keno_action
-                code keno.txt
+        code keno.txt
     ;;
     7) egrep -r 'LCDM' log/ | sed -r 's!(^[^\(]+\()!(!g' >>LCDM.txt
     ;;
