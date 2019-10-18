@@ -110,7 +110,7 @@ balance_action() {
     
     findvariable=$(mktemp)
     delstrings=$(mktemp)
-    egrep -r 'BillAcceptor|total spin|SpinTotal|BEGIN| BL | TW: | Balance |LUA:|enter double|opened|LCDM: e|BOX [0-1] - u|SSP: dd |paycenter|exit double' log/ | sed -r 's!(^[^\(]+\()!(!g' >>$findvariable
+    egrep -r 'BillAcceptor|total spin|SpinTotal|BEGIN| BL | RB: | RW: | TW: | Balance |LUA:|enter double|opened|LCDM: e|BOX [0-1] - u|SSP: dd |paycenter|exit double' log/ | sed -r 's!(^[^\(]+\()!(!g' >>$findvariable
     echo -n "Enter start date(YYYY-MM-DD HH:MM): "
     read sdata
     echo -n "Enter end date(YYYY-MM-DD HH:MM): "
@@ -134,7 +134,7 @@ case $1 in
     1 | --inkass) inkass_action
         code inkass.txt
     ;;
-    2) egrep -r 'Escrow command|Stacked command|BillAcceptor|Transport|jammed status|CCTALK: error read answer' log/ | sed -r 's!(^[^\(]+\()!(!g' >>3.txt
+    2) egrep -r 'Escrow command|Stacked command|BillAcceptor| BD: 1| BD: 2| BD: 5|Transport|jammed status|CCTALK: error read answer' log/ | sed -r 's!(^[^\(]+\()!(!g' >>3.txt
         #grep -B   unload from   cashbox
     ;;
     3 | --bur) bur_action
@@ -146,13 +146,17 @@ case $1 in
     5 | --keno) keno_action
         code keno.txt
     ;;
+    6) egrep -r 'CCTALK| cctalk' log/ | sed -r 's!(^[^\(]+\()!(!g' >>cctalk.txt
+    ;;
     7) egrep -r 'LCDM' log/ | sed -r 's!(^[^\(]+\()!(!g' >>LCDM.txt
+    ;;
+    8) egrep -r 'CCNET' log/ | sed -r 's!(^[^\(]+\()!(!g' >>CCNET.txt
     ;;
     -h | --help) display_help
     ;;
     9) echo "Yes, Vlad has nine fingers:)"
     ;;
-    *) echo "$1 is not an option"
+    *) echo "$1 is not an option. Please use $0 --help"
         exit 1
     ;;
 esac
