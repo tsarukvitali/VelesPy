@@ -3,6 +3,20 @@
 #Copyright 2019 Tsaruk Vitaly
 #Licensed under the Apache License, Version 2.0
 
+
+display_help() {
+    echo "Usage: $0 [option...]" >&2
+    echo
+    echo "    1,  --inkass  "
+    echo "    2,  {in work} "
+    echo "    3,  --bur     "
+    echo "    4,  --balance "
+    echo "    5,  --keno    "
+    echo "    7,  {in work} "
+    echo
+    exit 1
+}
+
 inkass_action() {
     inkasslegend=$(<inkass_head)
     
@@ -89,13 +103,13 @@ bur_action() {
 balance_action() {
     balancelegend=$(<balance_head)
     balance_file="./balance.txt"
-
+    
     if [ -f $balance_file ] ; then
         rm $balance_file
     fi
-
+    
     findvariable=$(mktemp)
-    delstrings=$(mktemp)    
+    delstrings=$(mktemp)
     egrep -r 'BillAcceptor|total spin|SpinTotal|BEGIN| BL | TW: | Balance |LUA:|enter double|opened|LCDM: e|BOX [0-1] - u|SSP: dd |paycenter|exit double' log/ | sed -r 's!(^[^\(]+\()!(!g' >>$findvariable
     echo -n "Enter start date(YYYY-MM-DD HH:MM): "
     read sdata
@@ -116,8 +130,6 @@ balance_action() {
 }
 
 
-
-
 case $1 in
     1 | --inkass) inkass_action
         code inkass.txt
@@ -129,16 +141,18 @@ case $1 in
         code bur.txt
     ;;
     4 | --balance) balance_action
-                     code balance.txt  
+        code balance.txt
     ;;
     5 | --keno) keno_action
         code keno.txt
     ;;
     7) egrep -r 'LCDM' log/ | sed -r 's!(^[^\(]+\()!(!g' >>LCDM.txt
     ;;
+    -h | --help) display_help
+    ;;
     9) echo "Yes, Vlad has nine fingers:)"
     ;;
-    *) echo "Unknown answer"
+    *) echo "$1 is not an option"
         exit 1
     ;;
 esac
