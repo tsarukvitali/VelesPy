@@ -29,7 +29,7 @@ inkass_action() {
     sortstrings=$(mktemp)
     snumberf=$(mktemp)
     delstrings=$(mktemp)
-    egrep -r 'BOX [0-1] l|LCDM: e|BOX [0-1] - u|bill end status|LCDM box [0-1] blocked|answer: Timeout|sensor status|LCDM: read timeout|Counting error|Motor stop status|SOL sensor|Pickup error|Over reject status|Reject tray is not recognized' log/ | sed -r 's!(^[^\(]+\()!(!g' >> $findvariable
+    egrep -r 'BOX [0-1] l|LCDM: e|BOX [0-1] - u||LCDM: command .44|bill end status|LCDM box [0-1] blocked|answer: Timeout|sensor status|LCDM: read timeout|Counting error|Motor stop status|SOL sensor|Pickup error|Over reject status|Reject tray is not recognized' log/ | sed -r 's!(^[^\(]+\()!(!g' >> $findvariable
     sort --output=$sortstrings $findvariable
     snumber=$(grep -n "BOX [0-1] l" $sortstrings | cut -f1 -d:)
     echo "$snumber" >> $snumberf
