@@ -1,4 +1,5 @@
 <h2>VELESBash</h2>
+<img alt="Hex.pm" src="https://img.shields.io/hexpm/l/plug?style=for-the-badge">
 <h3>TO DO</h3>
 <ul>
 <li>в баланс добавить бонусные игры!!!!
