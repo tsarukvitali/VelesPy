@@ -7,12 +7,14 @@
 display_help() {
     echo "Usage: $0 [option...]" >&2
     echo
-    echo "    1,  --inkass  "
-    echo "    2,  {in work} "
-    echo "    3,  --bur     "
-    echo "    4,  --balance "
-    echo "    5,  --keno    "
-    echo "    7,  {in work} "
+    echo "    1,  --inkass Armenia collection problems "
+    echo "    2,  --bill Armenia billacceptor problems "
+    echo "    3,  --bur  Bur billacceptor problems   "
+    echo "    4,  --balance balance player problems "
+    echo "    5,  --keno  problems in game keno  "
+    echo "    6,  protocol CCTALK "
+    echo "    7,  protocol LCDM "
+    echo "    8,  protocol CCNET  "
     echo
     exit 1
 }
@@ -73,7 +75,7 @@ keno_action() {
     echo "$kenolegend" >> $keno_file
     while read LINE; do
         if [[ ("$sdata" < "$LINE" && "$LINE" < "$edata") || ( "$f1data" < "$LINE" && "$LINE" < "$f2data") ]]; then
-            echo "$LINE" >> $delstrings
+            echo "$LINE" >> "$delstrings"
         fi
     done < "$findvariable"
     grep -v "AddTicketButton" "$delstrings" >> $keno_file
@@ -130,12 +132,35 @@ balance_action() {
 }
 
 
+bill_action() {
+    billlegend=$(<bill_head)
+    
+    bill_file="./bill.txt"
+    if [ -f $bill_file ] ; then
+        rm $bill_file
+    fi
+    
+    findvariable=$(mktemp)
+    sortstrings=$(mktemp)
+    egrep -r 'Escrow command|Stacked command|BillAcceptor| BD: 2| BD: 1| BD: 2| BD: 5|Transport|jammed status|CCTALK: error read answer|billacceptor' log/ | sed -r 's!(^[^\(]+\()!(!g' >> "$findvariable"
+    sort --output="$sortstrings" "$findvariable"
+    echo "$billlegend" >> $bill_file
+    echo >> $bill_file
+    cat "$sortstrings" >> $bill_file
+    for file in ./log/*
+    do
+        grep -A 45 'BD: EncAcceptorBtn ' "$file" >> $bill_file
+    done
+}
+
+
+
 case $1 in
     1 | --inkass) inkass_action
         code inkass.txt
     ;;
-    2) egrep -r 'Escrow command|Stacked command|BillAcceptor| BD: 1| BD: 2| BD: 5|Transport|jammed status|CCTALK: error read answer' log/ | sed -r 's!(^[^\(]+\()!(!g' >>3.txt
-        #grep -B   unload from   cashbox
+    2 | --bill) bill_action
+       code bill.txt
     ;;
     3 | --bur) bur_action
         code bur.txt

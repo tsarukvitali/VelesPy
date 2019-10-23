@@ -1,0 +1,12 @@
+Добрый день!
+
+Кол-во принятых купюр за цикл с 26.09 по 01.10, кол-во купюр принятых и попавших в отчет.
+
+CCTALK: Escrow command, bill nominal: 1000.000000 country: AM0020A? - в транспорте купюроприемника находится купюра номиналом 1000
+CCTALK: Stacked command, bill nominal: 1000.000000 country: AM0020A? - купюроприемник положил купюру в кассету
+BillAcceptor:126 | t:139674081294080 | BL incremented from 0.00 to 1000.00, increment 1000.00. - купюра успешно зачислена на баланс
+CCTALK: Escrow command, bill not found - купюроприемник не распознал купюру и вернул ее клиенту
+CCTALk: command 'ffffff9f', answer: Transport Motor failure status: '3' -  - купюроприемник не смог транспортировать купюру в стекер и вернул ее клиенту/ купюроприемник не смог захватить купюру
+CCTALk: command 'ffffff9f', answer: Bill validator jammed status: '6' - ошибка замятия, купюра застряла между областью валидации и областью вставки купюры.
+CCTALK: error read answer - от купюроприемника пришла неизвестная ошибка
+cctalk: initialize billacceptor on port '/dev/ttyS4' - купюроприемник переинициализировался
