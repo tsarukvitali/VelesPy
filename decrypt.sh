@@ -125,7 +125,7 @@ balance_action() {
         if [[ ("$sdata" < "$LINE" && "$LINE" < "$edata") || ( "$f1data" < "$LINE" && "$LINE" < "$f2data") ]]; then
             echo "$LINE" >> $delstrings
         fi
-    done < "$findvariable"
+    done < $findvariable
     cat "$delstrings" >>$balance_file
 }
 
