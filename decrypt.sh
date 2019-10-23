@@ -7,14 +7,14 @@
 display_help() {
     echo "Usage: $0 [option...]" >&2
     echo
-    echo "    1,  --inkass Armenia collection problems "
-    echo "    2,  --bill Armenia billacceptor problems "
-    echo "    3,  --bur  Bur billacceptor problems   "
-    echo "    4,  --balance balance player problems "
-    echo "    5,  --keno  problems in game keno  "
-    echo "    6,  protocol CCTALK "
-    echo "    7,  protocol LCDM "
-    echo "    8,  protocol CCNET  "
+    echo "    1,  {--inkass}   Armenia collection problems "
+    echo "    2,  {--bill}     Armenia billacceptor problems "
+    echo "    3,  {--bur}      Bur billacceptor problems   "
+    echo "    4,  {--balance}  balance player problems "
+    echo "    5,  {--keno}     problems in game keno  "
+    echo "    6,  {--cctalk}   protocol CCTALK "
+    echo "    7,  {--lcdm}     protocol LCDM "
+    echo "    8,  {--ccnet}    protocol CCNET  "
     echo
     exit 1
 }
@@ -160,7 +160,7 @@ case $1 in
         code inkass.txt
     ;;
     2 | --bill) bill_action
-       code bill.txt
+        code bill.txt
     ;;
     3 | --bur) bur_action
         code bur.txt
@@ -171,11 +171,11 @@ case $1 in
     5 | --keno) keno_action
         code keno.txt
     ;;
-    6) egrep -r 'CCTALK| cctalk' log/ | sed -r 's!(^[^\(]+\()!(!g' >>cctalk.txt
+    6 | --cctalk) egrep -r 'CCTALK| cctalk' log/ | sed -r 's!(^[^\(]+\()!(!g' >>cctalk.txt
     ;;
-    7) egrep -r 'LCDM' log/ | sed -r 's!(^[^\(]+\()!(!g' >>LCDM.txt
+    7 | --lcdm) egrep -r 'LCDM' log/ | sed -r 's!(^[^\(]+\()!(!g' >>LCDM.txt
     ;;
-    8) egrep -r 'CCNET' log/ | sed -r 's!(^[^\(]+\()!(!g' >>CCNET.txt
+    8 | --ccnet) egrep -r 'CCNET' log/ | sed -r 's!(^[^\(]+\()!(!g' >>CCNET.txt
     ;;
     -h | --help) display_help
     ;;
