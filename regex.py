@@ -5,7 +5,7 @@ import re
 import linecache
 
 path = os.path.dirname(__file__)
-
+print(path)
 pattern = re.compile(r"\.txt")
 inkreg = ['unload from   cashbox', 'BOX 0 l', 'BOX 1 l', 'LCDM: e', 'BOX 0 - u', 'BOX 1 - u', 'LCDM: command \'44', 'bill end status', 'LCDM box 0 blocked', 'LCDM box 1 blocked', 'answer: Timeout', 'sensor status', 'LCDM: read timeout', 'Counting error', 'Motor stop status', 'SOL sensor', 'Pickup error', 'Over reject status', 'Reject tray is not recognized' ]
 delink = ['CCTALK', 'Cashe Dispenser', 'LCDM: write to port', 'VKP80II' ]
@@ -33,9 +33,11 @@ for subdir, dirs, files in os.walk(path):
 
 #for ext2 in delink:
 #if ext2 not in linecache.getline(logged_in, i):
+if not os.path.exists(path + '/output/'):
+    os.makedirs(path + '/output/')
 
 f1 = sorted(f1)
-with open('output.txt', 'w') as f3:
+with open(path + '/output/output.txt', 'w') as f3:
     f3.write("".join(f1))
     f3.write("\n\n\n")
     f3.write("".join(f2))
