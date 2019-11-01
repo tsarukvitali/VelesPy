@@ -29,7 +29,7 @@ for subdir, dirs, files in os.walk(path):
 if not os.path.exists(path + '/output/'):
     os.makedirs(path + '/output/')
 
-with open(path + '/output/keno.txt', 'w') as out:
+with open(path + '/output/keno_output.txt', 'w') as out:
     out.write("".join(outkeno))
     
 
