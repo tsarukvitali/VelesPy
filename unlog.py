@@ -15,7 +15,7 @@ if not os.path.isfile(decrypterPath):
 	else:
 		decrypterPath = decrypterPath2
 
-pattern = re.compile("\.log[\.\d+]*$")
+pattern = re.compile(r"\.log[\.\d+]*$")
 
 for subdir, dirs, files in os.walk(rootdir):
 	for file in files:
