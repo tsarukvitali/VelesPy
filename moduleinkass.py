@@ -34,7 +34,7 @@ if not os.path.exists(path + '/output/'):
     os.makedirs(path + '/output/')
 
 f1 = sorted(f1)
-with open(path + '/output/output.txt', 'w') as f3:
+with open(path + '/output/inkass_output.txt', 'w') as f3:
     f3.write("".join(f1))
     f3.write("\n\n\n")
     f3.write("".join(f2))
