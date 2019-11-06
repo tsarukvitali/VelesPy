@@ -295,7 +295,11 @@ def unlog():
             print ("can not find decrypter by path " + decrypterPath + " or " + decrypterPath2)
         else:
             decrypterPath = decrypterPath2
+<<<<<<< HEAD
     pattern = re.compile(r"(veksel\.log|platform\.log)[\.\d+]*$")
+=======
+    pattern = re.compile(r"\.log[\.\d+]*$")
+>>>>>>> ce834ef39e052fdb4e002bcc9afbcd376e6aa987
     loggeddir = rootdir + '/log'
     for dirname, subdirs, files in os.walk(rootdir):
         for file in files:
