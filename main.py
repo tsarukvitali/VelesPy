@@ -295,7 +295,7 @@ def unlog():
             print ("can not find decrypter by path " + decrypterPath + " or " + decrypterPath2)
         else:
             decrypterPath = decrypterPath2
-    pattern = re.compile("\.log[\.\d+]*$")
+    pattern = re.compile(r"\.log[\.\d+]*$")
     loggeddir = rootdir + '/log'
     for subdir, dirs, files in os.walk(rootdir):
         for file in files:
