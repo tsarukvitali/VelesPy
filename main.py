@@ -17,11 +17,11 @@ def inkass_action():
     inkreg = ['unload from   cashbox', 'BOX 0 l', 'BOX 1 l', 'LCDM: e', 'BOX 0 - u', 'BOX 1 - u', 'LCDM: command \'44', 'bill end status', 'LCDM box 0 blocked', 'LCDM box 1 blocked', 'answer: Timeout', 'sensor status', 'LCDM: read timeout', 'Counting error', 'Motor stop status', 'SOL sensor', 'Pickup error', 'Over reject status', 'Reject tray is not recognized' ]
     f1 = []
     f2 = []
-    for subdir, dirs, files in os.walk(path):
+    for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
-                logged_in = os.path.join(subdir, file)
-                with open(logged_in) as logged: 
+                logged_in = os.path.join(dirname, file)
+                with open(logged_in) as logged:
                     for num, line in enumerate(logged):
                         for ext in inkreg[1:len(inkreg)]:
                             if ext in line:
@@ -53,16 +53,16 @@ def keno_action():
     path = os.path.dirname(os.path.realpath(__name__))
     pattern = re.compile(r"\.log.*.txt")
     keno = ['AddTicketButton', ' BD: ', ' BL ', ' BMA: ', 'BEGIN ']
-    outkeno = [] 
+    outkeno = []
     sdata = "(" + input("Enter start date(YYYY-MM-DD HH:MM): ")
     edata = "(" + input("Enter end date(YYYY-MM-DD HH:MM): ")
     f1data = "(1970-01-01 00:00"
     f2data = "(1970-01-01 00:10"
-    for subdir, dirs, files in os.walk(path):
+    for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
-                logged = os.path.join(subdir, file)
-                with open(logged) as logged: 
+                logged = os.path.join(dirname, file)
+                with open(logged) as logged:
                     for line in logged:
                         for elem_keno in keno[1:len(keno)]:
                             if elem_keno in line:
@@ -87,19 +87,19 @@ def bur_action():
     path = os.path.dirname(os.path.realpath(__name__))
     pattern = re.compile(r"\.log.*.txt")
     bur = ['BD: EncAcceptorBtn ', 'Escrow command', 'Stacked complete', 'BillAcceptor', 'CCNet: error read answer', 'initialize billacceptor on port', ' BD: 1', ' BD: 2', ' BD: 5']
-    f1 = [] 
+    f1 = []
     f2 = []
-    for subdir, dirs, files in os.walk(path):
+    for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
-                logged_in = os.path.join(subdir, file)
-                with open(logged_in) as logged: 
+                logged_in = os.path.join(dirname, file)
+                with open(logged_in) as logged:
                     for num, line in enumerate(logged):
-                        for elem_bur in bur[1:len(bur)]:                       
+                        for elem_bur in bur[1:len(bur)]:
                             if elem_bur in line:
                                 f1.append(re.sub(r'^[^\(]+\(', r'(', line))
                         if bur[0] in line:
-                            for i in range((num+1),(num+42),1):                                
+                            for i in range((num+1),(num+42),1):
                                 f2.append(re.sub(r'^[^\(]+\(', r'(', linecache.getline(logged_in, i)))
     if not os.path.exists(path + '/output/'):
         os.makedirs(path + '/output/')
@@ -120,18 +120,18 @@ def balance_action():
     path = os.path.dirname(os.path.realpath(__name__))
     pattern = re.compile(r"\.log.*.txt")
     balance = ['BillAcceptor', 'total spin', 'SpinTotal', 'BEGIN', ' BL ', ' RB: ', ' RW: ', ' TW: ', ' Balance ', 'LUA:', 'enter double', 'opened', 'LCDM: e', 'BOX 0 - u', 'BOX 1 - u', 'SSP: dd ', 'paycenter', 'exit double']
-    outbalance = [] 
+    outbalance = []
     sdata = "(" + input("Enter start date(YYYY-MM-DD HH:MM): ")
     edata = "(" + input("Enter end date(YYYY-MM-DD HH:MM): ")
     f1data = "(1970-01-01 00:00"
     f2data = "(1970-01-01 00:10"
-    for subdir, dirs, files in os.walk(path):
+    for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
-                logged = os.path.join(subdir, file)
-                with open(logged) as logged: 
+                logged = os.path.join(dirname, file)
+                with open(logged) as logged:
                     for line in logged:
-                        for elem_balance in balance:                       
+                        for elem_balance in balance:
                             if elem_balance in line:
                                 tmpcutline = re.sub(r'^[^\(]+\(', r'(', line)
                                 if (sdata < tmpcutline and tmpcutline < edata) or ( f1data < tmpcutline and tmpcutline < f2data):
@@ -150,19 +150,19 @@ def bill_action():
     path = os.path.dirname(os.path.realpath(__name__))
     pattern = re.compile(r"\.log.*.txt")
     bill = ['BD: EncAcceptorBtn ', 'Escrow command', 'Stacked command', 'BillAcceptor', ' BD: 2', ' BD: 1', ' BD: 4', ' BD: 5', 'Transport', 'jammed status', 'CCTALK: error read answer', 'billacceptor']
-    f1 = [] 
+    f1 = []
     f2 = []
-    for subdir, dirs, files in os.walk(path):
+    for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
-                logged_in = os.path.join(subdir, file)
+                logged_in = os.path.join(dirname, file)
                 with open(logged_in) as logged: 
                     for num, line in enumerate(logged):
-                        for elem_bill in bill[1:len(bill)]:                       
+                        for elem_bill in bill[1:len(bill)]:
                             if elem_bill in line:
                                 f1.append(re.sub(r'^[^\(]+\(', r'(', line))
                         if bill[0] in line:
-                            for i in range((num+1),(num+42),1):                                
+                            for i in range((num+1),(num+42),1):
                                 f2.append(re.sub(r'^[^\(]+\(', r'(', linecache.getline(logged_in, i)))
     if not os.path.exists(path + '/output/'):
         os.makedirs(path + '/output/')
@@ -184,21 +184,21 @@ def cctalk_action():
     path = os.path.dirname(os.path.realpath(__name__))
     pattern = re.compile(r"\.log.*.txt")
     cctalk = ['CCTALK', ' cctalk']
-    outcctalk = [] 
-    for subdir, dirs, files in os.walk(path):
+    outcctalk = []
+    for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
-                logged = os.path.join(subdir, file)
-                with open(logged) as logged: 
+                logged = os.path.join(dirname, file)
+                with open(logged) as logged:
                     for line in logged:
-                        for elem_cctalk in cctalk:                       
+                        for elem_cctalk in cctalk:
                             if elem_cctalk in line:
-                                outcctalk.append(re.sub(r'^[^\(]+\(', r'(', line))                            
+                                outcctalk.append(re.sub(r'^[^\(]+\(', r'(', line))
     if not os.path.exists(path + '/output/'):
         os.makedirs(path + '/output/')
     cctalk_file = path + '/output/cctalk_output.txt'
     if os.path.isfile(cctalk_file):
-        os.remove(cctalk_file) 
+        os.remove(cctalk_file)
     with open(cctalk_file, 'w') as cctalk_file:
         cctalk_file.write("".join(outcctalk))
 
@@ -207,21 +207,21 @@ def lcdm_action():
     path = os.path.dirname(os.path.realpath(__name__))
     pattern = re.compile(r"\.log.*.txt")
     lcdm = ['LCDM']
-    outlcdm = [] 
-    for subdir, dirs, files in os.walk(path):
+    outlcdm = []
+    for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
-                logged = os.path.join(subdir, file)
-                with open(logged) as logged: 
+                logged = os.path.join(dirname, file)
+                with open(logged) as logged:
                     for line in logged:
-                        for elem_lcdm in lcdm:                       
+                        for elem_lcdm in lcdm:
                             if elem_lcdm in line:
-                                outlcdm.append(re.sub(r'^[^\(]+\(', r'(', line))                            
+                                outlcdm.append(re.sub(r'^[^\(]+\(', r'(', line))
     if not os.path.exists(path + '/output/'):
         os.makedirs(path + '/output/')
     lcdm_file = path + '/output/lcdm_output.txt'
     if os.path.isfile(lcdm_file):
-        os.remove(lcdm_file) 
+        os.remove(lcdm_file)
     with open(lcdm_file, 'w') as lcdm_file:
         lcdm_file.write("".join(outlcdm))
 
@@ -230,20 +230,20 @@ def ccnet_action():
     path = os.path.dirname(os.path.realpath(__name__))
     pattern = re.compile(r"\.log.*.txt")
     ccnet = ['CCNet']
-    outccnet = [] 
-    for subdir, dirs, files in os.walk(path):
+    outccnet = []
+    for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
-                logged = os.path.join(subdir, file)
-                with open(logged) as logged: 
-                    for line in logged:                                       
+                logged = os.path.join(dirname, file)
+                with open(logged) as logged:
+                    for line in logged:
                         if ccnet[0] in line:
                             outccnet.append(re.sub(r'^[^\(]+\(', r'(', line))
     if not os.path.exists(path + '/output/'):
         os.makedirs(path + '/output/')
     ccnet_file = path + '/output/ccnet_output.txt'
     if os.path.isfile(ccnet_file):
-        os.remove(ccnet_file)                            
+        os.remove(ccnet_file)
     with open(ccnet_file, 'w') as ccnet_file:
         ccnet_file.write("".join(outccnet))
 
@@ -255,7 +255,7 @@ def connect_action(uuid):
         os.makedirs(path + '/raw_log/')
     keyfile =str(path + '/key/key.pem')
     outpath = path + '/raw_log/logs.tar.gz'
-    command = 'tar -czvf /tmp/logs.tar.gz ' + remotepath 
+    command = 'tar -czvf /tmp/logs.tar.gz ' + remotepath
     command2 = 'rm /tmp/logs.tar.gz'
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -269,7 +269,7 @@ def connect_action(uuid):
     sftp.close()
     ssh.close()
 
-    shutil.unpack_archive(outpath, path + '/raw_log/') 
+    shutil.unpack_archive(outpath, path + '/raw_log/')
     
     r'''
     if [ -n "$2" ]
@@ -295,12 +295,12 @@ def unlog():
             print ("can not find decrypter by path " + decrypterPath + " or " + decrypterPath2)
         else:
             decrypterPath = decrypterPath2
-    pattern = re.compile("\.log[\.\d+]*$")
+    pattern = re.compile(r"(veksel\.log|platform\.log)[\.\d+]*$")
     loggeddir = rootdir + '/log'
-    for subdir, dirs, files in os.walk(rootdir):
+    for dirname, subdirs, files in os.walk(rootdir):
         for file in files:
             if pattern.search(file):
-                logged = os.path.join(subdir, file)
+                logged = os.path.join(dirname, file)
                 unloggedName = file + ".txt"
                 unlogged = os.path.join(loggeddir, unloggedName)
                 #subprocess.call(["C:/Documents and Settings/flow_model/flow.exe"])
