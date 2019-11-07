@@ -21,7 +21,7 @@ def inkass_action():
         for file in files:
             if pattern.search(file):
                 logged_in = os.path.join(dirname, file)
-                with open(logged_in) as logged:
+                with open(logged_in, encoding="utf-8") as logged:
                     for num, line in enumerate(logged):
                         for ext in inkreg[1:len(inkreg)]:
                             if ext in line:
@@ -75,8 +75,8 @@ def keno_action():
     keno_file = path + '/output/keno_output.txt'
     if os.path.isfile(keno_file):
         os.remove(keno_file)
-    with open(keno_file, 'w') as keno_file:
-        with open("keno_head") as f3:
+    with open(keno_file, 'w', encoding="utf-8") as keno_file:
+        with open("keno_head", encoding="utf-8") as f3:
             kenolegend = f3.read()
             keno_file.write(kenolegend)
         keno_file.write("\n\n\n")
@@ -107,8 +107,8 @@ def bur_action():
     if os.path.isfile(bur_file):
         os.remove(bur_file)
     f1 = sorted(f1)
-    with open(bur_file, 'w') as bur_file:
-        with open("bur_head") as f3:
+    with open(bur_file, 'w', encoding="utf-8") as bur_file:
+        with open("bur_head", encoding="utf-8") as f3:
             burlegend = f3.read()
             bur_file.write(burlegend)
         bur_file.write("\n\n\n")
@@ -139,8 +139,8 @@ def balance_action():
     if not os.path.exists(path + '/output/'):
         os.makedirs(path + '/output/')
     balance_file = path + '/output/balance_output.txt'
-    with open(balance_file, 'w') as balance_file:
-        with open("balance_head") as f1:
+    with open(balance_file, 'w', encoding="utf-8") as balance_file:
+        with open("balance_head", encoding="utf-8") as f1:
             balancelegend = f1.read()
             balance_file.write(balancelegend)
         balance_file.write("\n\n\n")
@@ -156,7 +156,7 @@ def bill_action():
         for file in files:
             if pattern.search(file):
                 logged_in = os.path.join(dirname, file)
-                with open(logged_in) as logged: 
+                with open(logged_in, encoding="utf-8") as logged: 
                     for num, line in enumerate(logged):
                         for elem_bill in bill[1:len(bill)]:
                             if elem_bill in line:
@@ -170,8 +170,8 @@ def bill_action():
     if os.path.isfile(bill_file):
         os.remove(bill_file)
     f1 = sorted(f1)
-    with open(bill_file, 'w') as bill_file:
-        with open("bill_head") as f3:
+    with open(bill_file, 'w', encoding="utf-8") as bill_file:
+        with open("bill_head", encoding="utf-8") as f3:
             billlegend = f3.read()
             bill_file.write(billlegend)
         bill_file.write("\n\n\n")
@@ -189,7 +189,7 @@ def cctalk_action():
         for file in files:
             if pattern.search(file):
                 logged = os.path.join(dirname, file)
-                with open(logged) as logged:
+                with open(logged, encoding="utf-8") as logged:
                     for line in logged:
                         for elem_cctalk in cctalk:
                             if elem_cctalk in line:
@@ -199,7 +199,7 @@ def cctalk_action():
     cctalk_file = path + '/output/cctalk_output.txt'
     if os.path.isfile(cctalk_file):
         os.remove(cctalk_file)
-    with open(cctalk_file, 'w') as cctalk_file:
+    with open(cctalk_file, 'w', encoding="utf-8") as cctalk_file:
         cctalk_file.write("".join(outcctalk))
 
 
@@ -212,7 +212,7 @@ def lcdm_action():
         for file in files:
             if pattern.search(file):
                 logged = os.path.join(dirname, file)
-                with open(logged) as logged:
+                with open(logged, encoding="utf-8") as logged:
                     for line in logged:
                         for elem_lcdm in lcdm:
                             if elem_lcdm in line:
@@ -222,7 +222,7 @@ def lcdm_action():
     lcdm_file = path + '/output/lcdm_output.txt'
     if os.path.isfile(lcdm_file):
         os.remove(lcdm_file)
-    with open(lcdm_file, 'w') as lcdm_file:
+    with open(lcdm_file, 'w', encoding="utf-8") as lcdm_file:
         lcdm_file.write("".join(outlcdm))
 
 
@@ -235,7 +235,7 @@ def ccnet_action():
         for file in files:
             if pattern.search(file):
                 logged = os.path.join(dirname, file)
-                with open(logged) as logged:
+                with open(logged, encoding="utf-8") as logged:
                     for line in logged:
                         if ccnet[0] in line:
                             outccnet.append(re.sub(r'^[^\(]+\(', r'(', line))
@@ -244,7 +244,7 @@ def ccnet_action():
     ccnet_file = path + '/output/ccnet_output.txt'
     if os.path.isfile(ccnet_file):
         os.remove(ccnet_file)
-    with open(ccnet_file, 'w') as ccnet_file:
+    with open(ccnet_file, 'w', encoding="utf-8") as ccnet_file:
         ccnet_file.write("".join(outccnet))
 
 
@@ -305,7 +305,7 @@ def unlog():
                 unlogged = os.path.join(loggeddir, unloggedName)
                 #subprocess.call(["C:/Documents and Settings/flow_model/flow.exe"])
                 print (logged + " > " + unlogged)
-                with open(unlogged, "w") as outfile:
+                with open(unlogged, "w", encoding="utf-8") as outfile:
                     subprocess.run([ decrypterPath, logged], stdout=outfile)
 
 def main():
