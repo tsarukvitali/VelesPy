@@ -40,8 +40,8 @@ def inkass_action():
     if os.path.isfile(inkass_file):
         os.remove(inkass_file)
         f1 = sorted(f1)
-    with open(inkass_file, 'w') as inkass_file:
-        with open('inkass_head') as f3:
+    with open(inkass_file, 'w', encoding="utf-8") as inkass_file:
+        with open('inkass_head', encoding="utf8") as f3:
             kenolegend = f3.read()
             inkass_file.write(kenolegend)
         inkass_file.write("\n\n\n")
@@ -332,7 +332,7 @@ def main():
         print("Armenia collection problems")
         if args.inkass > "0":
             connect_action(args.inkass)
-        unlog()
+        #unlog()
         inkass_action()
     if args.bill:
         print("Armenia billacceptor problems")
