@@ -9,6 +9,7 @@ import paramiko
 import re
 import linecache
 import subprocess
+import multiprocessing
 import shutil
 
 def inkass_action():
@@ -259,54 +260,50 @@ def connect_action(uuid):
     command2 = 'rm /tmp/logs.tar.gz'
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect('54.93.125.153', username='ubuntu', key_filename=keyfile)
+    ssh.connect('54.216.225.233', username='root', key_filename=keyfile)
     stdin, stdout, stderr = ssh.exec_command(command)
-    print(stdin, '\n', stdout, '\n', stderr)
+    #print(stdin, '\n', stdout, '\n', stderr)
     sftp = ssh.open_sftp()
     sftp.get('/tmp/logs.tar.gz', outpath )
+    print("logs.tar.gz" )
     stdin, stdout, stderr = ssh.exec_command(command2)
-    print(stdin, '\n', stdout, '\n', stderr)
+    #print(stdin, '\n', stdout, '\n', stderr)
     sftp.close()
     ssh.close()
-
     shutil.unpack_archive(outpath, path + '/raw_log/')
-    
-    r'''
-    if [ -n "$2" ]
-    then
-    mkdir -p log
-    scp -i "key.pem" -r root@54.216.225.233:/raid/data/telemetry/"$2"/*/platform* ./log/
-    python3 unlog.py
-    case_action "$1" 
-    zip "$2".zip ./log/*.txt
-    else
-    case_action "$1" 
-    zip log.zip ./log/*.txt
-    fi'''
 
-def unlog():
-    rootdir = os.path.dirname(os.path.realpath(__name__))
+def processFile(arglistloggedfile):
+    path = os.path.dirname(os.path.realpath(__name__))
     decrypter = "decrypt_log"
-    decrypterPath = os.path.join(rootdir, decrypter)
+    decrypterPath = os.path.join(path, decrypter)
     if not os.path.isfile(decrypterPath):
         decrypter2 = "decrypt_log.exe"
-        decrypterPath2 = os.path.join(rootdir, decrypter2)
+        decrypterPath2 = os.path.join(path, decrypter2)
         if not os.path.isfile(decrypterPath2):
             print ("can not find decrypter by path " + decrypterPath + " or " + decrypterPath2)
         else:
             decrypterPath = decrypterPath2
-    pattern = re.compile(r"(veksel\.log|platform\.log)[\.\d+]*$")
-    loggeddir = rootdir + '/log'
-    for dirname, subdirs, files in os.walk(rootdir):
+    unloggedName = os.path.basename(arglistloggedfile) + ".txt"
+    loggeddir = path + '/log'
+    unlogged = os.path.join(loggeddir, unloggedName)
+    print (arglistloggedfile + " > " + unlogged)
+    with open(unlogged, "w", encoding="utf-8") as outfile:
+        subprocess.run([ decrypterPath, arglistloggedfile], stdout=outfile)
+
+def unlog():
+    path = os.path.dirname(os.path.realpath(__name__))    
+    pattern = re.compile(r"(veksel\.log|platform\.log|watchdog\.log|updater\.log)[\.\d+]*$")
+    if not os.path.exists(path + '/log/'):
+        os.makedirs(path + '/log/')
+    loggedFiles = []
+    for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
                 logged = os.path.join(dirname, file)
-                unloggedName = file + ".txt"
-                unlogged = os.path.join(loggeddir, unloggedName)
-                #subprocess.call(["C:/Documents and Settings/flow_model/flow.exe"])
-                print (logged + " > " + unlogged)
-                with open(unlogged, "w", encoding="utf-8") as outfile:
-                    subprocess.run([ decrypterPath, logged], stdout=outfile)
+                loggedFiles.append(logged)
+    p = multiprocessing.Pool(multiprocessing.cpu_count())
+    p.map(processFile, loggedFiles)
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -332,27 +329,32 @@ def main():
         print("Armenia collection problems")
         if args.inkass > "0":
             connect_action(args.inkass)
-        #unlog()
+        unlog()
         inkass_action()
+
     if args.bill:
         print("Armenia billacceptor problems")
         if args.bill > "0":
             connect_action(args.bill)
+        unlog()
         bill_action()
     if args.bur:
         print("Bur billacceptor problems")
         if args.bur > "0":
             connect_action(args.bur)
+        unlog()
         bur_action()
     if args.balance:
         print("Player balance problem")
         if args.balance > "0":
             connect_action(args.balance)
+        unlog()
         balance_action()
     if args.keno:
         print("Keno problem")
         if args.keno > "0":
             connect_action(args.keno)
+        unlog()
         keno_action()
     if args.cctalk:
         print("CCTALK protocol")
