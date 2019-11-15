@@ -12,12 +12,13 @@ import subprocess
 import multiprocessing
 import shutil
 
+path = os.path.dirname(os.path.realpath(__file__))
+pattern = re.compile(r"\.log.*.txt")
+
 def inkass_action():
-    path = os.path.dirname(os.path.realpath(__name__))
-    pattern = re.compile(r"\.log.*.txt")
     inkreg = ['unload from   cashbox', 'BOX 0 l', 'BOX 1 l', 'LCDM: e', 'BOX 0 - u', 'BOX 1 - u', 'LCDM: command \'44', 'bill end status', 'LCDM box 0 blocked', 'LCDM box 1 blocked', 'answer: Timeout', 'sensor status', 'LCDM: read timeout', 'Counting error', 'Motor stop status', 'SOL sensor', 'Pickup error', 'Over reject status', 'Reject tray is not recognized' ]
-    f1 = []
-    f2 = []
+    inkassout1 = []
+    inkassout2 = []
     for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
@@ -26,33 +27,31 @@ def inkass_action():
                     for num, line in enumerate(logged):
                         for ext in inkreg[1:len(inkreg)]:
                             if ext in line:
-                                f1.append(re.sub(r'^[^\(]+\(', r'(', line))
+                                inkassout1.append(re.sub(r'^[^\(]+\(', r'(', line))
                         for ext in inkreg[1:3]:
                             if ext in line:
                                 for i in range((num+1),(num+18),1):
-                                    f2.append(re.sub(r'^[^\(]+\(', r'(', linecache.getline(logged_in, i)))
+                                    inkassout2.append(re.sub(r'^[^\(]+\(', r'(', linecache.getline(logged_in, i)))
                         if inkreg[0] in line:
                             if num >19:
                                 for i in range((num-19),(num+1),1):
-                                    f2.append(re.sub(r'^[^\(]+\(', r'(', linecache.getline(logged_in, i)))
+                                    inkassout2.append(re.sub(r'^[^\(]+\(', r'(', linecache.getline(logged_in, i)))
     if not os.path.exists(path + '/output/'):
         os.makedirs(path + '/output/')
     inkass_file = path + '/output/inkass_output.txt'
     if os.path.isfile(inkass_file):
         os.remove(inkass_file)
-        f1 = sorted(f1)
+        inkassout1 = sorted(inkassout1)
     with open(inkass_file, 'w', encoding="utf-8") as inkass_file:
-        with open('inkass_head', encoding="utf8") as f3:
-            kenolegend = f3.read()
-            inkass_file.write(kenolegend)
+        with open('inkass_head', encoding="utf8") as inkass_head:
+            inkasslegend = inkass_head.read()
+            inkass_file.write(inkasslegend)
         inkass_file.write("\n\n\n")
-        inkass_file.write("".join(f1))
+        inkass_file.write("".join(inkassout1))
         inkass_file.write("\n\n\n")
-        inkass_file.write("".join(f2))
+        inkass_file.write("".join(inkassout2))
 
 def keno_action():
-    path = os.path.dirname(os.path.realpath(__name__))
-    pattern = re.compile(r"\.log.*.txt")
     keno = ['AddTicketButton', ' BD: ', ' BL ', ' BMA: ', 'BEGIN ']
     outkeno = []
     sdata = "(" + input("Enter start date(YYYY-MM-DD HH:MM): ")
@@ -77,19 +76,17 @@ def keno_action():
     if os.path.isfile(keno_file):
         os.remove(keno_file)
     with open(keno_file, 'w', encoding="utf-8") as keno_file:
-        with open("keno_head", encoding="utf-8") as f3:
-            kenolegend = f3.read()
+        with open("keno_head", encoding="utf-8") as keno_head:
+            kenolegend = keno_head.read()
             keno_file.write(kenolegend)
         keno_file.write("\n\n\n")
         keno_file.write("".join(outkeno))
 
 
 def bur_action():
-    path = os.path.dirname(os.path.realpath(__name__))
-    pattern = re.compile(r"\.log.*.txt")
     bur = ['BD: EncAcceptorBtn ', 'Escrow command', 'Stacked complete', 'BillAcceptor', 'CCNet: error read answer', 'initialize billacceptor on port', ' BD: 1', ' BD: 2', ' BD: 5']
-    f1 = []
-    f2 = []
+    outbur1 = []
+    outbur2 = []
     for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
@@ -98,28 +95,26 @@ def bur_action():
                     for num, line in enumerate(logged):
                         for elem_bur in bur[1:len(bur)]:
                             if elem_bur in line:
-                                f1.append(re.sub(r'^[^\(]+\(', r'(', line))
+                                outbur1.append(re.sub(r'^[^\(]+\(', r'(', line))
                         if bur[0] in line:
                             for i in range((num+1),(num+42),1):
-                                f2.append(re.sub(r'^[^\(]+\(', r'(', linecache.getline(logged_in, i)))
+                                outbur2.append(re.sub(r'^[^\(]+\(', r'(', linecache.getline(logged_in, i)))
     if not os.path.exists(path + '/output/'):
         os.makedirs(path + '/output/')
     bur_file = path + '/output/bur_output.txt'
     if os.path.isfile(bur_file):
         os.remove(bur_file)
-    f1 = sorted(f1)
+    outbur1 = sorted(outbur1)
     with open(bur_file, 'w', encoding="utf-8") as bur_file:
-        with open("bur_head", encoding="utf-8") as f3:
-            burlegend = f3.read()
+        with open("bur_head", encoding="utf-8") as bur_head:
+            burlegend = bur_head.read()
             bur_file.write(burlegend)
         bur_file.write("\n\n\n")
-        bur_file.write("".join(f1))
+        bur_file.write("".join(outbur1))
         bur_file.write("\n\n\n")
-        bur_file.write("".join(f2))
+        bur_file.write("".join(outbur2))
 
 def balance_action():
-    path = os.path.dirname(os.path.realpath(__name__))
-    pattern = re.compile(r"\.log.*.txt")
     balance = ['BillAcceptor', 'total spin', 'SpinTotal', 'BEGIN', ' BL ', ' RB: ', ' RW: ', ' TW: ', ' Balance ', 'LUA:', 'enter double', 'opened', 'LCDM: e', 'BOX 0 - u', 'BOX 1 - u', 'SSP: dd ', 'paycenter', 'exit double']
     outbalance = []
     sdata = "(" + input("Enter start date(YYYY-MM-DD HH:MM): ")
@@ -141,18 +136,16 @@ def balance_action():
         os.makedirs(path + '/output/')
     balance_file = path + '/output/balance_output.txt'
     with open(balance_file, 'w', encoding="utf-8") as balance_file:
-        with open("balance_head", encoding="utf-8") as f1:
-            balancelegend = f1.read()
+        with open("balance_head", encoding="utf-8") as balance_head:
+            balancelegend = balance_head.read()
             balance_file.write(balancelegend)
         balance_file.write("\n\n\n")
         balance_file.write("".join(outbalance))
 
 def bill_action():
-    path = os.path.dirname(os.path.realpath(__name__))
-    pattern = re.compile(r"\.log.*.txt")
     bill = ['BD: EncAcceptorBtn ', 'Escrow command', 'Stacked command', 'BillAcceptor', ' BD: 2', ' BD: 1', ' BD: 4', ' BD: 5', 'Transport', 'jammed status', 'CCTALK: error read answer', 'billacceptor']
-    f1 = []
-    f2 = []
+    outbill1 = []
+    outbill2 = []
     for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
@@ -161,29 +154,27 @@ def bill_action():
                     for num, line in enumerate(logged):
                         for elem_bill in bill[1:len(bill)]:
                             if elem_bill in line:
-                                f1.append(re.sub(r'^[^\(]+\(', r'(', line))
+                                outbill1.append(re.sub(r'^[^\(]+\(', r'(', line))
                         if bill[0] in line:
                             for i in range((num+1),(num+42),1):
-                                f2.append(re.sub(r'^[^\(]+\(', r'(', linecache.getline(logged_in, i)))
+                                outbill2.append(re.sub(r'^[^\(]+\(', r'(', linecache.getline(logged_in, i)))
     if not os.path.exists(path + '/output/'):
         os.makedirs(path + '/output/')
     bill_file = path + '/output/bill_output.txt'
     if os.path.isfile(bill_file):
         os.remove(bill_file)
-    f1 = sorted(f1)
+    outbill1 = sorted(outbill1)
     with open(bill_file, 'w', encoding="utf-8") as bill_file:
-        with open("bill_head", encoding="utf-8") as f3:
-            billlegend = f3.read()
+        with open("bill_head", encoding="utf-8") as bill_head:
+            billlegend = bill_head.read()
             bill_file.write(billlegend)
         bill_file.write("\n\n\n")
-        bill_file.write("".join(f1))
+        bill_file.write("".join(outbill1))
         bill_file.write("\n\n\n")
-        bill_file.write("".join(f2))
+        bill_file.write("".join(outbill2))
 
 
 def cctalk_action():
-    path = os.path.dirname(os.path.realpath(__name__))
-    pattern = re.compile(r"\.log.*.txt")
     cctalk = ['CCTALK', ' cctalk']
     outcctalk = []
     for dirname, subdirs, files in os.walk(path):
@@ -205,8 +196,6 @@ def cctalk_action():
 
 
 def lcdm_action():
-    path = os.path.dirname(os.path.realpath(__name__))
-    pattern = re.compile(r"\.log.*.txt")
     lcdm = ['LCDM']
     outlcdm = []
     for dirname, subdirs, files in os.walk(path):
@@ -228,8 +217,6 @@ def lcdm_action():
 
 
 def ccnet_action():
-    path = os.path.dirname(os.path.realpath(__name__))
-    pattern = re.compile(r"\.log.*.txt")
     ccnet = ['CCNet']
     outccnet = []
     for dirname, subdirs, files in os.walk(path):
@@ -251,7 +238,6 @@ def ccnet_action():
 
 def connect_action(uuid):
     remotepath = "/raid/data/telemetry/" + uuid + "/*/platform*"
-    path = os.path.dirname(os.path.realpath(__name__))
     if not os.path.exists(path + '/raw_log/'):
         os.makedirs(path + '/raw_log/')
     keyfile =str(path + '/key/key.pem')
@@ -265,7 +251,7 @@ def connect_action(uuid):
     #print(stdin, '\n', stdout, '\n', stderr)
     sftp = ssh.open_sftp()
     sftp.get('/tmp/logs.tar.gz', outpath )
-    print("logs.tar.gz" )
+    print("logs.tar.gz downloaded")
     stdin, stdout, stderr = ssh.exec_command(command2)
     #print(stdin, '\n', stdout, '\n', stderr)
     sftp.close()
@@ -273,7 +259,6 @@ def connect_action(uuid):
     shutil.unpack_archive(outpath, path + '/raw_log/')
 
 def processFile(arglistloggedfile):
-    path = os.path.dirname(os.path.realpath(__name__))
     decrypter = "decrypt_log"
     decrypterPath = os.path.join(path, decrypter)
     if not os.path.isfile(decrypterPath):
@@ -291,19 +276,32 @@ def processFile(arglistloggedfile):
         subprocess.run([ decrypterPath, arglistloggedfile], stdout=outfile)
 
 def unlog():
-    path = os.path.dirname(os.path.realpath(__name__))    
-    pattern = re.compile(r"(veksel\.log|platform\.log|watchdog\.log|updater\.log)[\.\d+]*$")
+    unlogPattern = re.compile(r"(veksel\.log|platform\.log|watchdog\.log|updater\.log)[\.\d+]*$")
     if not os.path.exists(path + '/log/'):
         os.makedirs(path + '/log/')
     loggedFiles = []
     for dirname, subdirs, files in os.walk(path):
         for file in files:
-            if pattern.search(file):
+            if unlogPattern.search(file):
                 logged = os.path.join(dirname, file)
                 loggedFiles.append(logged)
     p = multiprocessing.Pool(multiprocessing.cpu_count())
     p.map(processFile, loggedFiles)
 
+def deldir():
+    log = path + '/log/'
+    output = path + '/output/'
+    raw_log = path + '/raw_log/'
+    if os.path.exists(log):
+        shutil.rmtree(log)
+    if os.path.exists(output):
+        shutil.rmtree(output)
+    if os.path.exists(raw_log):
+        shutil.rmtree(raw_log)
+
+def createzip(uuid):
+    pathzip = path + '/log/'
+    shutil.make_archive(uuid, 'zip', pathzip)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -327,35 +325,44 @@ def main():
 
     if args.inkass:
         print("Armenia collection problems")
+        deldir()
         if args.inkass > "0":
             connect_action(args.inkass)
         unlog()
         inkass_action()
-
+        createzip(args.inkass)
     if args.bill:
         print("Armenia billacceptor problems")
+        deldir()
         if args.bill > "0":
             connect_action(args.bill)
         unlog()
         bill_action()
+        createzip(args.bill)
     if args.bur:
         print("Bur billacceptor problems")
+        deldir()
         if args.bur > "0":
             connect_action(args.bur)
         unlog()
         bur_action()
+        createzip(args.bur)
     if args.balance:
         print("Player balance problem")
+        deldir()
         if args.balance > "0":
             connect_action(args.balance)
         unlog()
         balance_action()
+        createzip(args.balance)
     if args.keno:
         print("Keno problem")
+        deldir()
         if args.keno > "0":
             connect_action(args.keno)
         unlog()
         keno_action()
+        createzip(args.keno)
     if args.cctalk:
         print("CCTALK protocol")
         cctalk_action()
