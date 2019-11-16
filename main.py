@@ -41,13 +41,13 @@ def inkass_action():
     inkass_file = path + '/output/inkass_output.txt'
     if os.path.isfile(inkass_file):
         os.remove(inkass_file)
-        inkassout1 = sorted(inkassout1)
+        sortinkassout1 = sorted(inkassout1)
     with open(inkass_file, 'w', encoding="utf-8") as inkass_file:
         with open('inkass_head', encoding="utf8") as inkass_head:
             inkasslegend = inkass_head.read()
             inkass_file.write(inkasslegend)
         inkass_file.write("\n\n\n")
-        inkass_file.write("".join(inkassout1))
+        inkass_file.write("".join(sortinkassout1))
         inkass_file.write("\n\n\n")
         inkass_file.write("".join(inkassout2))
 
@@ -104,13 +104,13 @@ def bur_action():
     bur_file = path + '/output/bur_output.txt'
     if os.path.isfile(bur_file):
         os.remove(bur_file)
-    outbur1 = sorted(outbur1)
+    sortoutbur1 = sorted(outbur1)
     with open(bur_file, 'w', encoding="utf-8") as bur_file:
         with open("bur_head", encoding="utf-8") as bur_head:
             burlegend = bur_head.read()
             bur_file.write(burlegend)
         bur_file.write("\n\n\n")
-        bur_file.write("".join(outbur1))
+        bur_file.write("".join(sortoutbur1))
         bur_file.write("\n\n\n")
         bur_file.write("".join(outbur2))
 
@@ -163,13 +163,13 @@ def bill_action():
     bill_file = path + '/output/bill_output.txt'
     if os.path.isfile(bill_file):
         os.remove(bill_file)
-    outbill1 = sorted(outbill1)
+    sortoutbill1 = sorted(outbill1)
     with open(bill_file, 'w', encoding="utf-8") as bill_file:
         with open("bill_head", encoding="utf-8") as bill_head:
             billlegend = bill_head.read()
             bill_file.write(billlegend)
         bill_file.write("\n\n\n")
-        bill_file.write("".join(outbill1))
+        bill_file.write("".join(sortoutbill1))
         bill_file.write("\n\n\n")
         bill_file.write("".join(outbill2))
 
@@ -321,48 +321,55 @@ def main():
                         help="LCDM protocol")
     parser.add_argument("-8", "--ccnet", action="store_true",
                         help="CCNET protocol")
+    parser.add_argument("-d", "--declog", nargs='?', const="0",
+                        help="Log decoding")
     args = parser.parse_args()
 
     if args.inkass:
         print("Armenia collection problems")
-        deldir()
         if args.inkass > "0":
+            deldir()
             connect_action(args.inkass)
-        unlog()
+            unlog()
         inkass_action()
-        createzip(args.inkass)
+        if args.inkass > "0":
+            createzip(args.inkass)
     if args.bill:
         print("Armenia billacceptor problems")
-        deldir()
         if args.bill > "0":
+            deldir()
             connect_action(args.bill)
-        unlog()
+            unlog()
         bill_action()
-        createzip(args.bill)
+        if args.bill > "0":
+            createzip(args.bill)
     if args.bur:
         print("Bur billacceptor problems")
-        deldir()
         if args.bur > "0":
+            deldir()
             connect_action(args.bur)
-        unlog()
+            unlog()
         bur_action()
-        createzip(args.bur)
+        if args.bur > "0":
+            createzip(args.bur)
     if args.balance:
         print("Player balance problem")
-        deldir()
         if args.balance > "0":
+            deldir()
             connect_action(args.balance)
-        unlog()
+            unlog()
         balance_action()
-        createzip(args.balance)
+        if args.balance > "0":
+            createzip(args.balance)
     if args.keno:
         print("Keno problem")
-        deldir()
         if args.keno > "0":
+            deldir()
             connect_action(args.keno)
-        unlog()
+            unlog()
         keno_action()
-        createzip(args.keno)
+        if args.keno > "0":
+            createzip(args.keno)
     if args.cctalk:
         print("CCTALK protocol")
         cctalk_action()
@@ -372,7 +379,14 @@ def main():
     if args.ccnet:
         print("CCNET protocol")
         ccnet_action()
-
+    if args.declog:
+        print("Log decoding")
+        if args.declog > "0":
+            deldir()
+            connect_action(args.declog)
+        unlog()
+        if args.declog > "0":
+            createzip(args.declog)
 
 if __name__ == "__main__":
     main()
