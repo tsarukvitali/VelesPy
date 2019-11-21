@@ -41,13 +41,12 @@ def inkass_action():
     inkass_file = path + '/output/inkass_output.txt'
     if os.path.isfile(inkass_file):
         os.remove(inkass_file)
-        sortinkassout1 = sorted(inkassout1)
     with open(inkass_file, 'w', encoding="utf-8") as inkass_file:
         with open('inkass_head', encoding="utf8") as inkass_head:
             inkasslegend = inkass_head.read()
             inkass_file.write(inkasslegend)
         inkass_file.write("\n\n\n")
-        inkass_file.write("".join(sortinkassout1))
+        inkass_file.write("".join(sorted(inkassout1)))
         inkass_file.write("\n\n\n")
         inkass_file.write("".join(inkassout2))
 
@@ -104,13 +103,12 @@ def bur_action():
     bur_file = path + '/output/bur_output.txt'
     if os.path.isfile(bur_file):
         os.remove(bur_file)
-    sortoutbur1 = sorted(outbur1)
     with open(bur_file, 'w', encoding="utf-8") as bur_file:
         with open("bur_head", encoding="utf-8") as bur_head:
             burlegend = bur_head.read()
             bur_file.write(burlegend)
         bur_file.write("\n\n\n")
-        bur_file.write("".join(sortoutbur1))
+        bur_file.write("".join(sorted(outbur1)))
         bur_file.write("\n\n\n")
         bur_file.write("".join(outbur2))
 
@@ -163,13 +161,12 @@ def bill_action():
     bill_file = path + '/output/bill_output.txt'
     if os.path.isfile(bill_file):
         os.remove(bill_file)
-    sortoutbill1 = sorted(outbill1)
     with open(bill_file, 'w', encoding="utf-8") as bill_file:
         with open("bill_head", encoding="utf-8") as bill_head:
             billlegend = bill_head.read()
             bill_file.write(billlegend)
         bill_file.write("\n\n\n")
-        bill_file.write("".join(sortoutbill1))
+        bill_file.write("".join(sorted(outbill1)))
         bill_file.write("\n\n\n")
         bill_file.write("".join(outbill2))
 
