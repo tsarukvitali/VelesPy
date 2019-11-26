@@ -121,7 +121,7 @@ def bur_action():
 
 def balance_action():
     balance = [
-        'total spin', 'BEGIN', ' BL ', ' RB: ', ' RW: ', ' TW: ', ' Balance ', 'LUA:', 'enter double', 
+        'total spin', 'BEGIN', ' BL ', ' RB: ', ' RW: ', ' TW: ', ' Balance ', 'LUA:', 'enter double',
         'opened', 'LCDM: e', 'BOX 0 - u', 'BOX 1 - u', 'SSP: dd ', 'paycenter', 'exit double',
         ]
     outbalance = []
