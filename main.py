@@ -16,7 +16,11 @@ path = os.path.dirname(os.path.realpath(__file__))
 pattern = re.compile(r"\.log.*.txt")
 
 def inkass_action():
-    inkreg = ['unload from   cashbox', 'BOX 0 l', 'BOX 1 l', 'LCDM: e', 'BOX 0 - u', 'BOX 1 - u', 'LCDM: command \'44', 'bill end status', 'LCDM box 0 blocked', 'LCDM box 1 blocked', 'answer: Timeout', 'sensor status', 'LCDM: read timeout', 'Counting error', 'Motor stop status', 'SOL sensor', 'Pickup error', 'Over reject status', 'Reject tray is not recognized' ]
+    inkreg = [
+        'unload from   cashbox', 'BOX 0 l', 'BOX 1 l', 'LCDM: e', 'BOX 0 - u', 'BOX 1 - u', 'LCDM: command \'44','bill end status',
+        'LCDM box 0 blocked', 'LCDM box 1 blocked', 'answer: Timeout', 'sensor status', 'LCDM: read timeout', 'Counting error',
+        'Motor stop status', 'SOL sensor', 'Pickup error', 'Over reject status', 'Reject tray is not recognized',
+        ]
     inkassout1 = []
     inkassout2 = []
     for dirname, subdirs, files in os.walk(path):
@@ -83,7 +87,10 @@ def keno_action():
 
 
 def bur_action():
-    bur = ['BD: EncAcceptorBtn ', 'Escrow command', 'Stacked complete', 'BillAcceptor', 'CCNet: error read answer', 'initialize billacceptor on port', ' BD: 1', ' BD: 2', ' BD: 5']
+    bur = [
+    'BD: EncAcceptorBtn ', 'Escrow command', 'Stacked complete', 'CCNet: error read answer',
+    'BillAcceptor', 'initialize billacceptor on port', ' BD: 1', ' BD: 2', ' BD: 5',
+    ]
     outbur1 = []
     outbur2 = []
     for dirname, subdirs, files in os.walk(path):
@@ -113,7 +120,10 @@ def bur_action():
         bur_file.write("".join(outbur2))
 
 def balance_action():
-    balance = ['BillAcceptor', 'total spin', 'SpinTotal', 'BEGIN', ' BL ', ' RB: ', ' RW: ', ' TW: ', ' Balance ', 'LUA:', 'enter double', 'opened', 'LCDM: e', 'BOX 0 - u', 'BOX 1 - u', 'SSP: dd ', 'paycenter', 'exit double']
+    balance = [
+        'total spin', 'BEGIN', ' BL ', ' RB: ', ' RW: ', ' TW: ', ' Balance ', 'LUA:', 'enter double', 
+        'opened', 'LCDM: e', 'BOX 0 - u', 'BOX 1 - u', 'SSP: dd ', 'paycenter', 'exit double',
+        ]
     outbalance = []
     sdata = "(" + input("Enter start date(YYYY-MM-DD HH:MM): ")
     edata = "(" + input("Enter end date(YYYY-MM-DD HH:MM): ")
@@ -141,14 +151,17 @@ def balance_action():
         balance_file.write("".join(outbalance))
 
 def bill_action():
-    bill = ['BD: EncAcceptorBtn ', 'Escrow command', 'Stacked command', 'BillAcceptor', ' BD: 2', ' BD: 1', ' BD: 4', ' BD: 5', 'Transport', 'jammed status', 'CCTALK: error read answer', 'billacceptor']
+    bill = [
+        'BD: EncAcceptorBtn ', 'Escrow command', 'Stacked command', 'BillAcceptor', ' BD: 2', ' BD: 1',
+        ' BD: 4', ' BD: 5', 'Transport', 'jammed status', 'CCTALK: error read answer', 'billacceptor',
+        ]
     outbill1 = []
     outbill2 = []
     for dirname, subdirs, files in os.walk(path):
         for file in files:
             if pattern.search(file):
                 logged_in = os.path.join(dirname, file)
-                with open(logged_in, encoding="utf-8") as logged: 
+                with open(logged_in, encoding="utf-8") as logged:
                     for num, line in enumerate(logged):
                         for elem_bill in bill[1:len(bill)]:
                             if elem_bill in line:
