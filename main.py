@@ -152,8 +152,8 @@ def balance_action():
 
 def bill_action():
     bill = [
-        'BD: EncAcceptorBtn ', 'Escrow command', 'Stacked command', 'BillAcceptor', ' BD: 2', ' BD: 1',
-        ' BD: 4', ' BD: 5', 'Transport', 'jammed status', 'CCTALK: error read answer', 'billacceptor',
+        'BD: EncAcceptorBtn ', 'Escrow command', 'Stacked command', 'BillAcceptor', ' BD: 2', ' BD: 1', ' BD: 4',
+        ' BD: 5', 'Insertion error', 'Transport', 'jammed status', 'CCTALK: error read answer', 'billacceptor',
         ]
     outbill1 = []
     outbill2 = []
@@ -313,7 +313,7 @@ def createzip(uuid):
     pathzip = path + '/log/'
     shutil.make_archive(uuid, 'zip', pathzip)
 
-def main():
+def argPars():
     parser = argparse.ArgumentParser()
     parser.add_argument("-1", "--inkass", nargs='?', const="0",
                         help="Armenia collection problems")
@@ -397,6 +397,9 @@ def main():
         unlog()
         if args.declog > "0":
             createzip(args.declog)
+
+def main():
+    argPars()
 
 if __name__ == "__main__":
     main()
